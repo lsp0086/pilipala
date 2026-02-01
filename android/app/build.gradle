@@ -37,6 +37,7 @@ def _keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties["keyAlias"]
 def _keyPassword = System.getenv("KEY_PASSWORD") ?: keystoreProperties["keyPassword"]
 
 android {
+    namespace "com.guozhigq.pilipala"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -63,6 +64,10 @@ android {
         versionName flutterVersionName
         minSdkVersion 21
         multiDexEnabled true
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     signingConfigs {
@@ -104,4 +109,24 @@ android.applicationVariants.all { variant ->
       output.versionCodeOverride = variant.versionCode * 10 + abiVersionCode
     }
   }
+}
+// 强制所有依赖使用相同的 Kotlin 版本，防止 1.6.0 干扰
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.jetbrains.kotlin') {
+            details.useVersion "1.9.0"
+        }
+    }
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.android {
+                // 强制所有子项目（插件）使用 34，不要去碰坏掉的 36
+                compileSdkVersion 34
+                buildToolsVersion "34.0.0"
+            }
+        }
+    }
 }

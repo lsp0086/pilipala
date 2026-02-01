@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
   # 动态取色
-  dynamic_color: ^1.7.0
+  dynamic_color: 1.7.0
 
   get: ^4.6.5
 
@@ -73,7 +73,7 @@ dependencies:
   # 下拉刷新
   pull_to_refresh_notification: ^3.0.1
   # 图标
-  font_awesome_flutter: ^10.4.0
+  font_awesome_flutter: 10.4.0
   # toast
   flutter_smart_dialog: ^4.9.4
   # 下滑关闭
@@ -84,9 +84,9 @@ dependencies:
   encrypt: ^5.0.3
 
   # 视频播放器
-  media_kit: ^1.1.10 # Primary package.
-  media_kit_video: ^1.2.4 # For video rendering.
-  media_kit_libs_video: ^1.0.4
+  media_kit: 1.1.10 # Primary package.
+  media_kit_video: 1.2.4 # For video rendering.
+  media_kit_libs_video: 1.0.4
 
   # 媒体通知
   audio_service: ^0.18.13
@@ -111,7 +111,7 @@ dependencies:
   # 高帧率
   flutter_displaymode: ^0.6.0
   # scheme跳转
-  appscheme: ^1.0.8
+  appscheme: ^1.2.0
   # 弹幕
   ns_danmaku:
     git:
@@ -171,6 +171,8 @@ dev_dependencies:
   build_runner: ^2.4.8
 
 dependency_overrides:
+  dynamic_color: 1.7.0
+  font_awesome_flutter: 10.4.0
   media_kit:
     git:
       url: https://github.com/media-kit/media-kit
