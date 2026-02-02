@@ -30,16 +30,22 @@ class LiveController extends GetxController {
     // if (type == 'init') {
     //   _currentPage = 1;
     // }
-    var res = await LiveHttp.liveList(
-      pn: _currentPage,
-    );
+    var res = await LiveHttp.liveIndexList();
+    List<LiveItemModel>? recommends = res['recommends'];
+    if (res['status'] && recommends != null) {
+      liveList.value = recommends;
+    }
+    return res;
+  }
+
+  Future fetchLiveFollowing() async {
+    var res = await LiveHttp.liveFollowing(pn: 1, ps: 20);
     if (res['status']) {
-      if (type == 'init') {
-        liveList.value = res['data'];
-      } else if (type == 'onLoad') {
-        liveList.addAll(res['data']);
-      }
-      _currentPage += 1;
+      liveFollowingList.value =
+          (res['data'].list as List<LiveFollowingItemModel>)
+              .where((LiveFollowingItemModel item) =>
+                  item.liveStatus == 1 && item.recordLiveTime == 0) // 根据条件过滤
+              .toList();
     }
     return res;
   }
@@ -47,7 +53,6 @@ class LiveController extends GetxController {
   // 下拉刷新
   Future onRefresh() async {
     queryLiveList('init');
-    fetchLiveFollowing();
   }
 
   // 上拉加载
@@ -67,15 +72,4 @@ class LiveController extends GetxController {
   }
 
   //
-  Future fetchLiveFollowing() async {
-    var res = await LiveHttp.liveFollowing(pn: 1, ps: 20);
-    if (res['status']) {
-      liveFollowingList.value =
-          (res['data'].list as List<LiveFollowingItemModel>)
-              .where((LiveFollowingItemModel item) =>
-                  item.liveStatus == 1 && item.recordLiveTime == 0) // 根据条件过滤
-              .toList();
-    }
-    return res;
-  }
 }

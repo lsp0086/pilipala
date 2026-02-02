@@ -7,6 +7,49 @@ import 'api.dart';
 import 'init.dart';
 
 class LiveHttp {
+  // live.dart
+  static Future liveIndexList() async {
+    var res = await Request().get(Api.liveListNew, data: {
+      'platform': 'web',
+      'web_location': '444.7',
+    });
+
+    if (res.data['code'] == 0) {
+      var roomList = res.data['data']['room_list'] as List;
+
+      // 1. 处理“我的关注”
+      var followModule = roomList.firstWhere(
+        (m) => m['module_info']['title'] == "我的关注",
+        orElse: () => null,
+      );
+      List<LiveItemModel> follows = [];
+      if (followModule != null) {
+        follows = (followModule['list'] as List).map<LiveItemModel>((e) {
+          // 【关键】手动补齐映射，因为这个接口返回的是 roomid
+          return LiveItemModel.fromJson({
+            ...e,
+            'roomid': e['roomid'], // 确保对应模型里的 json['roomid']
+            'cover': e['pic'], // 确保对应模型里的 json['cover']
+          });
+        }).toList();
+      }
+
+      // 2. 处理“推荐”
+      var recommendModule = roomList.firstWhere(
+        (m) => m['module_info']['title'].contains("推荐"),
+        orElse: () => roomList.last,
+      );
+      List<LiveItemModel> recommends =
+          (recommendModule['list'] as List).map<LiveItemModel>((e) {
+        // 【关键】推荐接口返回的是 room_id，要转成模型认的 roomid
+        return LiveItemModel.fromJson(e);
+      }).toList();
+
+      return {'status': true, 'follows': follows, 'recommends': recommends};
+    }
+    return {'status': false, 'msg': res.data['message']};
+  }
+
   static Future liveList(
       {int? vmid, int? pn, int? ps, String? orderType}) async {
     var res = await Request().get(Api.liveList,

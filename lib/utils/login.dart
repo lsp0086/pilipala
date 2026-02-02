@@ -19,23 +19,30 @@ import 'package:uuid/uuid.dart';
 class LoginUtils {
   static Future refreshLoginStatus(bool status) async {
     try {
-      // 更改我的页面登录状态
-      await Get.find<MineController>().resetUserInfo();
+      // 1. 更改我的页面登录状态 (通常这个页面可能已经加载)
+      if (Get.isRegistered<MineController>()) {
+        Get.find<MineController>().userLogin.value = status;
+        await Get.find<MineController>().resetUserInfo();
+      }
 
-      // 更改主页登录状态
-      HomeController homeCtr = Get.find<HomeController>();
-      homeCtr.updateLoginStatus(status);
+      // 2. 更改主页登录状态
+      if (Get.isRegistered<HomeController>()) {
+        HomeController homeCtr = Get.find<HomeController>();
+        homeCtr.updateLoginStatus(status);
+      }
 
-      MineController mineCtr = Get.find<MineController>();
-      mineCtr.userLogin.value = status;
+      // 3. 动态/朋友圈
+      if (Get.isRegistered<DynamicsController>()) {
+        Get.find<DynamicsController>().userLogin.value = status;
+      }
 
-      DynamicsController dynamicsCtr = Get.find<DynamicsController>();
-      dynamicsCtr.userLogin.value = status;
-
-      MediaController mediaCtr = Get.find<MediaController>();
-      mediaCtr.userLogin.value = status;
+      // 4. 媒体/收藏页面 (报错重灾区)
+      if (Get.isRegistered<MediaController>()) {
+        MediaController mediaCtr = Get.find<MediaController>();
+        mediaCtr.userLogin.value = status;
+      }
     } catch (err) {
-      SmartDialog.showToast('refreshLoginStatus error: ${err.toString()}');
+      print('refreshLoginStatus error: ${err.toString()}');
     }
   }
 

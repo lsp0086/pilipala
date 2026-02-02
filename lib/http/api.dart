@@ -226,7 +226,9 @@ class Api {
   // ?page=1&page_size=30&platform=web
   static const String liveList =
       '${HttpString.liveBaseUrl}/xlive/web-interface/v1/second/getUserRecommend';
-
+  // api.dart
+  static const String liveListNew =
+      '${HttpString.liveBaseUrl}/xlive/web-interface/v1/index/getList';
   // 直播间详情
   // cid roomId
   // qn 80:流畅，150:高清，400:蓝光，10000:原画，20000:4K, 30000:杜比

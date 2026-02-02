@@ -34,7 +34,7 @@ class LiveItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String heroTag = Utils.makeHeroTag(liveItem.roomid);
+    String heroTag = Utils.makeHeroTag(liveItem.roomId);
     return Card(
       elevation: 1,
       clipBehavior: Clip.hardEdge,
@@ -78,7 +78,7 @@ class LiveItem extends StatelessWidget {
                           duration: const Duration(milliseconds: 200),
                           child: LiveStat(
                             online: liveItem.online,
-                            cateName: liveItem.cateName,
+                            areaName: liveItem.areaName,
                           ),
                         ),
                       ),
@@ -145,9 +145,9 @@ class LiveContent extends StatelessWidget {
 
 class LiveStat extends StatelessWidget {
   final int? online;
-  final String? cateName;
+  final String? areaName;
 
-  const LiveStat({Key? key, required this.online, this.cateName})
+  const LiveStat({Key? key, required this.online, this.areaName})
       : super(key: key);
 
   @override
@@ -170,7 +170,7 @@ class LiveStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            cateName!,
+            areaName!,
             style: const TextStyle(fontSize: 11, color: Colors.white),
           ),
           Text(

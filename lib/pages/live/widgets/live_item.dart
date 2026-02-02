@@ -46,7 +46,7 @@ class LiveCardV extends StatelessWidget {
                     Hero(
                       tag: heroTag,
                       child: NetworkImgLayer(
-                        src: liveItem.cover!,
+                        src: liveItem.cover ?? "",
                         width: maxWidth,
                         height: maxHeight,
                       ),
@@ -122,7 +122,7 @@ class LiveContent extends StatelessWidget {
                 ),
                 if (crossAxisCount == 1) ...[
                   Text(
-                    ' • ${liveItem!.areaName!}',
+                    ' • ${liveItem!.areaName ?? "未知"}',
                     style: TextStyle(
                       fontSize:
                           Theme.of(context).textTheme.labelMedium!.fontSize,
@@ -175,7 +175,7 @@ class VideoStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            liveItem!.areaName!,
+            liveItem!.areaName ?? "未知",
             style: const TextStyle(fontSize: 11, color: Colors.white),
           ),
           Text(

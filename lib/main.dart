@@ -38,13 +38,17 @@ void main() async {
   await Request.setCookie();
 
   // 异常捕获 logo记录
-  final Catcher2Options releaseConfig = Catcher2Options(
+  // 1. 定义一个通用的配置
+  final Catcher2Options commonConfig = Catcher2Options(
     SilentReportMode(),
     [FileHandler(await getLogsPath())],
   );
 
+// 2. 并在初始化时全部传入
   Catcher2(
-    releaseConfig: releaseConfig,
+    debugConfig: commonConfig, // 调试模式配置
+    releaseConfig: commonConfig, // 发布模式配置
+    profileConfig: commonConfig, // 分析模式配置
     runAppFunction: () {
       runApp(const MyApp());
     },
@@ -222,7 +226,8 @@ class BuildMainApp extends StatelessWidget {
     );
 
     return GetMaterialApp(
-      title: 'PiliPala',
+      title: 'PiliPal',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: currentThemeValue == ThemeType.dark
             ? darkColorScheme
